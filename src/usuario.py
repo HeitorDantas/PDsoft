@@ -1,8 +1,9 @@
 
 
 class Usuario(object):
-	def __init__(self):
+	def __init__(self,nome,login):
 		self.nome = nome
+		self.login = login
 	def seguir(self,user):
 		pass
 	def curtir(self,post):
