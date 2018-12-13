@@ -1,5 +1,5 @@
 from os import system,name
-from Sistema_RedeSocial import RedeSocial
+from Sistema_RedeSocial import *
 
 def clear():
 	system('cls' if name == 'nt' else 'clear')
@@ -11,7 +11,7 @@ class UI:
 	'''
 	RS = None
 	def setRS(self,rs):
-		self.id = rs
+		self.RS = rs
 
 	def __init__(self):
 		self.listaOpcoes = {}
@@ -61,6 +61,7 @@ class UI_TelaInicial(UI):
 		elif op is '3': ret =  'sair'
 		else: ret =  self.nome
 		return ret
+
 class UI_HomePage(UI):
 	nome = 'homepage'
 	def __init__(self):
@@ -76,25 +77,53 @@ class UI_HomePage(UI):
 		print("3 - Buscar")
 		print("4 - Sair")
 
+class UI_TimeLine(UI):
+	nome = 'timeline'
+	def __init__(self):
+		self.posts_list = self.RS.timeline()
+
+	def _mostrar(self):
+		for post in self.posts_list:
+			post_formatado = "{}\nData do Post: {}\n\n{}\n\n{}\n".format(40*'-',post[1],post[0],40*'-')
+			print(post_formatado)
+
+class UI_Postar(UI):
+	nome = 'postar'
+	def run(self):
+		print("=======+++ LOGIN +++=========")
+		text = input("Escreva seu Post: ")
+
+		resp = self.RS.postar(self.usuarioLogado,text)
+		return 'homepage'
 
 class UI_Login(UI):
 	nome = 'login'
 	def run(self):
+
 		print("=======+++ LOGIN +++=========")
-		self.login = input("LOGIN: ")
-		self.senha = input("SENHA: ")
-		#if sucesso vai para homePage
-		#else para inicio
-		return 'homepage'
+		login = input("LOGIN: ")
+		senha = input("SENHA: ")
+
+		resp = self.RS.logar(login,senha)
+		if resp is True:
+			UI.usuarioLogado = login
+			return 'homepage'
+		else:
+			print('Erro login nao existente ou senha incorreta!')
+			return 'inicio'
+
+
 
 class UI_Cadastro(UI):
 	nome = 'cadastro'
 	def run(self):
 		print("=======+++ CADASTRO +++=========")
-		self.login = input("LOGIN: ")
-		self.senha = input("SENHA: ")
-		#if sucesso vai para inicio
-		#else para inicio
+		nome = input("Nome e sobrenome: ")
+		login = input("LOGIN: ")
+		senha = input("SENHA: ")
+
+		self.RS.cadastrar(nome,login,senha)
+
 		return 'inicio'
 
 if __name__ == '__main__':
