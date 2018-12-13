@@ -83,14 +83,21 @@ class UI_TimeLine(UI):
 		self.posts_list = self.RS.timeline()
 
 	def _mostrar(self):
+		print("=======+++ TIMELINE +++=========\n")
 		for post in self.posts_list:
-			post_formatado = "{}\nData do Post: {}\n\n{}\n\n{}\n".format(40*'-',post[1],post[0],40*'-')
+			post_formatado = "{}\nData do Post: {}   Usuario:{}\n\n{}\n\n{}\n".format(40*'-',post[1],post[0],40*'-')
 			print(post_formatado)
+			input
+	def run(self):
+		self._mostrar()
+		input("aperte ENTER para sair!")
+		clear()
+		return 'homepage'
 
 class UI_Postar(UI):
 	nome = 'postar'
 	def run(self):
-		print("=======+++ LOGIN +++=========")
+
 		text = input("Escreva seu Post: ")
 
 		resp = self.RS.postar(self.usuarioLogado,text)

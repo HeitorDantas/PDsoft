@@ -36,7 +36,7 @@ class RedeSocial(object):
         return False
 
     def postar(self, login,text):
-        self.database.inserirPostagem(login,texto)
+        self.database.inserirPostagem(login,text)
     def timeline(self):
         return self.database.buscarPostagens()
 
@@ -76,7 +76,14 @@ class Gerenciador(object):
         self.executeSQL(sql, args)
         resultados = self.cursor.fetchone()
         return resultados[0]
-
+    def quem_postou(self,id_post):
+        sql = '''
+            select (nome) from usuarios left join postagens
+            on usuarios.id_usuario = postagens.id_usuario
+             where login=?;
+        '''
+        self.cursor.execute(sql)
+        self.conexao.commit()
     def inserirPostagem(self,login,texto):
         id_usuario = self.verifica_id_usuario(login)
         sql = '''
